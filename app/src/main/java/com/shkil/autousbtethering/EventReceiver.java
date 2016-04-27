@@ -7,23 +7,21 @@ import android.util.Log;
 
 public class EventReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "Receiver";
-    private static TetheringManager tetheringManager;
+    private static final String TAG = "EventReceiver";
+
+    private static final boolean DEBUG = AppConfig.DEBUG;
+
+    public static Intent createPollingIntent(Context context) {
+        return new Intent(context, EventReceiver.class);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive(): intent=" + intent);
-        if (tetheringManager == null) {
-            tetheringManager = new TetheringManager();
+        if (DEBUG) {
+            Log.d(TAG, "onReceive(): intent=" + intent);
         }
-        /*try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
-        tetheringManager.setUsbTethering(true);
-
+        TetheringManager tetheringManager = TetheringManager.getInstance(context);
+        tetheringManager.restoreTetheringState();
     }
+
 }
